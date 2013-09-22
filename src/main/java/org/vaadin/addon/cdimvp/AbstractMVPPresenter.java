@@ -15,18 +15,18 @@ import javax.inject.Inject;
 import com.vaadin.cdi.UIScoped;
 
 /**
- * Abstract CDI MVP presenter. Associated {@link View} interface extension is
- * declared for each extended {@link AbstractPresenter} using the
+ * Abstract CDI MVP presenter. Associated {@link MVPView} interface extension is
+ * declared for each extended {@link AbstractMVPPresenter} using the
  * {@link ViewInterface} annotation.
  */
 @SuppressWarnings("serial")
 @UIScoped
-public abstract class AbstractPresenter<T extends View> implements
-        Serializable, Presenter {
+public abstract class AbstractMVPPresenter<T extends MVPView> implements
+        Serializable, MVPPresenter {
     private transient Logger logger = Logger.getLogger(getClass().getName());
 
     @Inject
-    private Instance<View> viewInstance;
+    private Instance<MVPView> viewInstance;
 
     protected T view;
 
@@ -36,7 +36,7 @@ public abstract class AbstractPresenter<T extends View> implements
     @PostConstruct
     protected void postConstruct() {
         // ViewInterface must be defined
-        final Class<? extends View> viewInterface = getClass().getAnnotation(
+        final Class<? extends MVPView> viewInterface = getClass().getAnnotation(
                 ViewInterface.class).value();
         view = (T) viewInstance.select(viewInterface).get();
 
@@ -52,6 +52,6 @@ public abstract class AbstractPresenter<T extends View> implements
     @Retention(RetentionPolicy.RUNTIME)
     @Inherited
     public static @interface ViewInterface {
-        Class<? extends View> value();
+        Class<? extends MVPView> value();
     }
 }

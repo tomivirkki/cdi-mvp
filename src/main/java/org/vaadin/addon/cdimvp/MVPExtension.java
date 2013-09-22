@@ -16,14 +16,14 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ObserverMethod;
 
-import org.vaadin.addon.cdimvp.AbstractPresenter.ViewInterface;
+import org.vaadin.addon.cdimvp.AbstractMVPPresenter.ViewInterface;
 import org.vaadin.addon.cdimvp.CDIEvent.CDIEventImpl;
 
 @SuppressWarnings("serial")
 public class MVPExtension implements Extension, Serializable {
     /**
      * Adds a View enter observer method for each bean extending
-     * {@link AbstractPresenter}.
+     * {@link AbstractMVPPresenter}.
      * 
      * @param afterBeanDiscovery
      * @param beanManager
@@ -33,7 +33,7 @@ public class MVPExtension implements Extension, Serializable {
             final BeanManager beanManager) {
 
         final Iterator<Bean<?>> beanIterator = beanManager.getBeans(
-                Presenter.class).iterator();
+                MVPPresenter.class).iterator();
         while (beanIterator.hasNext()) {
             final Bean<?> bean = beanIterator.next();
             afterBeanDiscovery
@@ -51,10 +51,10 @@ public class MVPExtension implements Extension, Serializable {
                                 throw new RuntimeException(
                                         "@ViewInterface must be declared for Presenters");
                             }
-                            final Class<? extends View> viewInterface = getBeanClass()
+                            final Class<? extends MVPView> viewInterface = getBeanClass()
                                     .getAnnotation(ViewInterface.class).value();
                             qualifiers.add(new CDIEventImpl(viewInterface
-                                    .getName() + AbstractPresenter.VIEW_ENTER));
+                                    .getName() + AbstractMVPPresenter.VIEW_ENTER));
                             return qualifiers;
                         }
 
@@ -79,7 +79,7 @@ public class MVPExtension implements Extension, Serializable {
                             final Object presenter = beanManager.getReference(
                                     bean, getBeanClass(),
                                     beanManager.createCreationalContext(bean));
-                            ((AbstractPresenter) presenter).viewEntered();
+                            ((AbstractMVPPresenter) presenter).viewEntered();
                         }
                     });
         }
