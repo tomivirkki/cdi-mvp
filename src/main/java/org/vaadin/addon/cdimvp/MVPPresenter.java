@@ -1,5 +1,5 @@
 package org.vaadin.addon.cdimvp;
 
-interface MVPPresenter {
+public interface MVPPresenter {
 
 }
