@@ -2,10 +2,8 @@ package org.vaadin.addon.cdimvp;
 
 import java.util.logging.Logger;
 
-import com.vaadin.cdi.UIScoped;
-
 @SuppressWarnings("serial")
-@UIScoped
+@UIScopedStereotype
 public abstract class AbstractMVPView extends ViewComponent implements MVPView {
     protected transient Logger logger = Logger.getLogger(getClass().getName());
 
@@ -30,5 +28,4 @@ public abstract class AbstractMVPView extends ViewComponent implements MVPView {
                 viewInterface.getName() + AbstractMVPPresenter.VIEW_ENTER, this);
         logger.info("View accessed: " + viewInterface);
     }
-
 }
