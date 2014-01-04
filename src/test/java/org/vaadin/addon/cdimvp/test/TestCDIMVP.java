@@ -8,6 +8,8 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.vaadin.addon.cdimvp.test.stubs.TestPresenter;
@@ -34,13 +36,11 @@ public class TestCDIMVP {
                 .addAsResource(
                         "META-INF/services/javax.enterprise.inject.spi.Extension")
                 .addClass(BeanStoreContainer.class);
-
-        // System.out.println(jar.toString(true));
         return jar;
-
     }
 
-    public TestCDIMVP() {
+    @BeforeClass
+    public static void init() {
         CurrentInstance.set(UIBean.class, new UIBean(new TestUI(), 1));
     }
 
