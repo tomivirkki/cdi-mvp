@@ -21,7 +21,6 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ObserverMethod;
 
-import org.vaadin.addon.cdimvp.AbstractMVPPresenter.ViewInterface;
 import org.vaadin.addon.cdimvp.CDIEvent.CDIEventImpl;
 
 @SuppressWarnings("serial")
@@ -46,7 +45,9 @@ public class MVPExtension implements Extension, Serializable {
         while (beanIterator.hasNext()) {
             final Bean<?> bean = beanIterator.next();
             if (bean.getBeanClass().getAnnotation(
-                    ViewInterface.class) == null) {
+                    AbstractMVPPresenter.ViewInterface.class) == null
+                    && bean.getBeanClass().getAnnotation(
+                            AbstractUIScopedMVPPresenter.ViewInterface.class) == null) {
                 event.addDeploymentProblem(new IllegalArgumentException(
                         bean.getBeanClass().getName()
                         + " must be annoteded with @ViewInterface annotation"));
@@ -113,15 +114,24 @@ public class MVPExtension implements Extension, Serializable {
                         public Set<Annotation> getObservedQualifiers() {
                             final Set<Annotation> qualifiers = new HashSet<Annotation>();
                             if (getBeanClass().getAnnotation(
-                                    ViewInterface.class) == null) {
-                                throw new RuntimeException(
-                                        "@ViewInterface must be declared for Presenters");
-                            }
+                                    AbstractMVPPresenter.ViewInterface.class) != null) {
                             final Class<? extends MVPView> viewInterface = getBeanClass()
-                            .getAnnotation(ViewInterface.class).value();
+                                .getAnnotation(AbstractMVPPresenter.ViewInterface.class).value();
                             qualifiers.add(new CDIEventImpl(viewInterface
                                             .getName() + AbstractMVPPresenter.VIEW_ENTER));
                             return qualifiers;
+                            } else if (getBeanClass().getAnnotation(
+                                    AbstractUIScopedMVPPresenter.ViewInterface.class) != null) {
+                                final Class<? extends MVPView> viewInterface = getBeanClass()
+                                .getAnnotation(AbstractUIScopedMVPPresenter.ViewInterface.class).value();
+                                qualifiers.add(new CDIEventImpl(viewInterface
+                                                .getName() + AbstractUIScopedMVPPresenter.VIEW_ENTER));
+                                return qualifiers;
+                            } else {
+                                throw new RuntimeException(
+                                        "@ViewInterface must be declared for Presenters");
+                            }
+
                         }
 
                         @Override
@@ -145,7 +155,11 @@ public class MVPExtension implements Extension, Serializable {
                             final Object presenter = beanManager.getReference(
                                     bean, getBeanClass(),
                                     beanManager.createCreationalContext(bean));
+                            if (presenter instanceof AbstractMVPPresenter) {
                             ((AbstractMVPPresenter) presenter).viewEntered();
+                            } else if (presenter instanceof AbstractUIScopedMVPPresenter) {
+                                ((AbstractUIScopedMVPPresenter) presenter).viewEntered();
+                            }
                         }
                     });
         }

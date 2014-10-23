@@ -17,8 +17,9 @@ import org.vaadin.addon.cdimvp.test.stubs.TestUI;
 import org.vaadin.addon.cdimvp.test.stubs.TestView;
 import org.vaadin.addon.cdimvp.test.stubs.TestViewImpl;
 
-import com.vaadin.cdi.internal.BeanStoreContainer;
+//import com.vaadin.cdi.internal.BeanStoreContainer;
 import com.vaadin.cdi.internal.UIBean;
+import com.vaadin.cdi.internal.ViewBean;
 import com.vaadin.util.CurrentInstance;
 
 @RunWith(Arquillian.class)
@@ -35,7 +36,8 @@ public class TestCDIMVP {
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource(
                         "META-INF/services/javax.enterprise.inject.spi.Extension")
-                .addClass(BeanStoreContainer.class);
+//                .addClass(BeanStoreContainer.class)
+                ;
         return jar;
     }
 
