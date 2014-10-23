@@ -14,21 +14,21 @@ import javax.inject.Inject;
 
 /**
  * Abstract CDI MVP presenter. Associated {@link MVPView} interface extension is
- * declared for each extended {@link AbstractMVPPresenter} using the
- * {@link ViewInterface} annotation. This is for use of with ViewScoped MVPViews 
+ * declared for each extended {@link AbstractUIScopedMVPPresenter} using the
+ * {@link ViewInterface} annotation. This is for use of with UIScoped MVPViews 
  */
 @SuppressWarnings("serial")
-@ViewScopedStereotype
-public abstract class AbstractMVPPresenter<T extends MVPView> implements
+@UIScopedStereotype
+public abstract class AbstractUIScopedMVPPresenter<T extends MVPView> implements
         Serializable, MVPPresenter {
-    private  transient Logger logger = Logger.getLogger(getClass().getName());
+    private transient Logger logger = Logger.getLogger(getClass().getName());
 
     @Inject
     private Instance<MVPView> viewInstance;
 
     protected T view;
 
-    public static final String VIEW_ENTER = "AbstractPresenter_ve";
+    public static final String VIEW_ENTER = "AbstractUIScopedPresenter_ve";
 
     @SuppressWarnings("unchecked")
     @PostConstruct
