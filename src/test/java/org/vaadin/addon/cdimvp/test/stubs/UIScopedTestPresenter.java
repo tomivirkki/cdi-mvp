@@ -7,10 +7,14 @@ import org.vaadin.addon.cdimvp.AbstractMVPPresenter.ViewInterface;
 import org.vaadin.addon.cdimvp.CDIEvent;
 import org.vaadin.addon.cdimvp.ParameterDTO;
 
-@ViewInterface(TestView.class)
-public class TestPresenter extends AbstractMVPPresenter<TestView> {
+import com.vaadin.cdi.UIScoped;
 
-    public static final String TEST_METHOD = "TestPresenter.TEST_METHOD";
+@UIScoped
+@ViewInterface(UIScopedTestView.class)
+public class UIScopedTestPresenter extends
+        AbstractMVPPresenter<UIScopedTestView> {
+
+    public static final String TEST_METHOD = "UIScopedTestPresenter.TEST_METHOD";
 
     private boolean viewEntered;
     private ParameterDTO eventParameters;
@@ -23,7 +27,7 @@ public class TestPresenter extends AbstractMVPPresenter<TestView> {
         viewEntered = true;
     }
 
-    public TestView getView() {
+    public UIScopedTestView getView() {
         return view;
     }
 

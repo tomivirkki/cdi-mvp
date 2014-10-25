@@ -4,9 +4,16 @@ import javax.annotation.PostConstruct;
 
 import org.vaadin.addon.cdimvp.AbstractMVPView;
 
+import com.vaadin.cdi.CDIView;
+import com.vaadin.cdi.ViewScoped;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.VerticalLayout;
 
-public class TestViewImpl extends AbstractMVPView implements TestView {
+@CDIView("viewscopedtestview")
+@ViewScoped
+public class ViewScopedTestViewImpl extends AbstractMVPView implements
+        ViewScopedTestView, View {
 
     private final VerticalLayout mainLayout = new VerticalLayout();
     private boolean entered;
@@ -27,7 +34,7 @@ public class TestViewImpl extends AbstractMVPView implements TestView {
     }
 
     public void fireAnEvent() {
-        fireViewEvent(TestPresenter.TEST_METHOD, 1, 2, 3);
+        fireViewEvent(ViewScopedTestPresenter.TEST_METHOD, 1, 2, 3);
     }
 
     @Override
@@ -37,6 +44,11 @@ public class TestViewImpl extends AbstractMVPView implements TestView {
 
     public boolean isEventHandled() {
         return eventHandled;
+    }
+
+    @Override
+    public void enter(ViewChangeEvent event) {
+        enter();
     }
 
 }
