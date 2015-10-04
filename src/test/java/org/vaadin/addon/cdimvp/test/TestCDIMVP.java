@@ -90,7 +90,12 @@ public class TestCDIMVP {
             e.printStackTrace();
         }
 
-        VaadinSession session = new VaadinSession(null);
+        VaadinSession session = new VaadinSession(null) {
+            @Override
+            public boolean hasLock() {
+                return true;
+            }
+        };
         session.setAttribute("cdi-session-id", 2l);
         CurrentInstance.set(VaadinSession.class, session);
 
